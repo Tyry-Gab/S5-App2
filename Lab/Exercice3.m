@@ -24,7 +24,7 @@ res = 1.9998 - 0.1538.*t + 0.1074*cos(w.*t) + 0.3434*sin(w.*t);
 %plot(tn,yn,t,res,t,test)
 
 %% RMS
-values = 1.9998 - 0.1538.*tn + 0.1074*cos(w.*tn) + 0.3434*sin(w.*tn);
+values = a(1) + a(2).*tn + a(3).*cos(w.*tn) + a(4).*sin(w.*tn);
 papa_rms = sqrt(1/numel(res)*sum((values-yn).^2));
 
 y_barrre = 1/numel(tn)*sum(yn);
@@ -36,9 +36,16 @@ R = sum((values-y_barrre).^2)/sum((yn-y_barrre).^2);
 
 papa_matrice2 = [ones(1, numel(tn)); tn; cos(w.*tn); sin(w.*tn) ]';
 
-A = inv(papa_matrice2' * papa_matrice2) * papa_matrice2' * yn'
+A = inv(papa_matrice2' * papa_matrice2) * papa_matrice2' * yn';
 test2 = A(1) + A(2).*t + A(3).*cos(w.*t) + A(4).*sin(w.*t);
 
 
 figure
 plot(tn,yn,t,test2)
+%% RMS2
+values2 = A(1) + A(2).*tn + A(3).*cos(w.*tn) + A(4).*sin(w.*tn);
+papa_rms2 = sqrt(1/numel(test2)*sum((values2-yn).^2));
+
+y_barrre = 1/numel(tn)*sum(yn);
+
+R2 = sum((values2-y_barrre).^2)/sum((yn-y_barrre).^2);
