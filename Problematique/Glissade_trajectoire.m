@@ -21,9 +21,9 @@ a = papa_matrice * matrice_y;
 
 X = linspace(0,30,10000000);
 glissade = a(1) + a(2).*X.^1 + a(3).*X.^2 + a(4).*X.^3 + a(5).*X.^4; 
-He = a(1) + a(2)*Xe^1 + a(3)*Xe^2 + a(4)*Xe^3 + a(5)*Xe^4
+He = a(1) + a(2)*Xe^1 + a(3)*Xe^2 + a(4)*Xe^3 + a(5)*Xe^4;
 
-derive = a(2)*Xe^0 + 2*a(3)*Xe^1 + 3*a(4)*Xe^2 + 4*a(5)*Xe^3
+derive = a(2)*Xe^0 + 2*a(3)*Xe^1 + 3*a(4)*Xe^2 + 4*a(5)*Xe^3;
 %% Plotting
 figure
 plot(X,glissade)
