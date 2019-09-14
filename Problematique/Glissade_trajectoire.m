@@ -19,7 +19,7 @@ matrice_y = [sum(Yn); sum(Yn.*Xn); sum(Yn.*Xn.^2); sum(Yn.*Xn.^3); sum(Yn.*Xn.^4
 
 a = papa_matrice * matrice_y;
 
-X = linspace(0,30,10000000);
+X = linspace(0,25,10000000);
 glissade = a(1) + a(2).*X.^1 + a(3).*X.^2 + a(4).*X.^3 + a(5).*X.^4; 
 He = a(1) + a(2)*Xe^1 + a(3)*Xe^2 + a(4)*Xe^3 + a(5)*Xe^4;
 
@@ -58,8 +58,9 @@ values = A(1).*Ouverture.^0 + A(2).*Ouverture.^1 + A(3).*Ouverture.^2 + A(4).*Ou
 RMS = sqrt(1/numel(McPlotty)*sum((values-Coefficient).^2));
 %% Finding coefficent
 
-
-
+target_speed = 22.5/3.6;
+Friction_work = masse*g*(He-30) + 0.5*masse*(target_speed^2-0);
+target_coeff = -Friction_work/(masse*g*(Xe-0));
 
 
 
