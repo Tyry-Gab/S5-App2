@@ -42,11 +42,11 @@ friction_less_speed = sqrt(2*Loss_pot_energy/masse);
 Ouverture = [0 10 20 30 40 50 60 70 80 90 100];
 Coefficient = [0.87 0.78 0.71 0.61 0.62 0.51 0.51 0.49 0.46 0.48 0.46];
 
-phi = [ones(1,numel(Ouverture)); Ouverture; Ouverture.^2; Ouverture.^3; Ouverture.^4; Ouverture.^5; Ouverture.^6; Ouverture.^7; Ouverture.^8]';
+phi = [ones(1,numel(Ouverture)); Ouverture; Ouverture.^2; Ouverture.^3; Ouverture.^4; Ouverture.^5; Ouverture.^6; Ouverture.^7]';
 A = inv(phi' * phi) * phi' * Coefficient';
 
 XPlotty = linspace(0,100);
-McPlotty = A(1).*XPlotty.^0 + A(2).*XPlotty.^1 + A(3).*XPlotty.^2 + A(4).*XPlotty.^3 + A(5).*XPlotty.^4 + A(6).*XPlotty.^5 + A(7).*XPlotty.^6 + A(8).*XPlotty.^7 + A(9).*XPlotty.^8;
+McPlotty = A(1).*XPlotty.^0 + A(2).*XPlotty.^1 + A(3).*XPlotty.^2 + A(4).*XPlotty.^3 + A(5).*XPlotty.^4 + A(6).*XPlotty.^5 + A(7).*XPlotty.^6 + A(8).*XPlotty.^7;
 
 
 figure
