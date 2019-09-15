@@ -19,7 +19,7 @@ matrice_y = [sum(Yn); sum(Yn.*Xn); sum(Yn.*Xn.^2); sum(Yn.*Xn.^3); sum(Yn.*Xn.^4
 
 a = papa_matrice * matrice_y;
 
-X = linspace(0,25,10000000);
+X = linspace(0,25);
 glissade = a(1) + a(2).*X.^1 + a(3).*X.^2 + a(4).*X.^3 + a(5).*X.^4; 
 He = a(1) + a(2)*Xe^1 + a(3)*Xe^2 + a(4)*Xe^3 + a(5)*Xe^4;
 
@@ -45,7 +45,7 @@ Coefficient = [0.87 0.78 0.71 0.61 0.62 0.51 0.51 0.49 0.46 0.48 0.46];
 phi = [ones(1,numel(Ouverture)); Ouverture; Ouverture.^2; Ouverture.^3; Ouverture.^4; Ouverture.^5; Ouverture.^6; Ouverture.^7]';
 A = inv(phi' * phi) * phi' * Coefficient';
 
-XPlotty = linspace(0,100);
+XPlotty = linspace(0,100,1000);
 McPlotty = A(1).*XPlotty.^0 + A(2).*XPlotty.^1 + A(3).*XPlotty.^2 + A(4).*XPlotty.^3 + A(5).*XPlotty.^4 + A(6).*XPlotty.^5 + A(7).*XPlotty.^6 + A(8).*XPlotty.^7;
 
 
@@ -54,13 +54,49 @@ hold on
 scatter(Ouverture,Coefficient)
 plot(XPlotty,McPlotty)
 
-values = A(1).*Ouverture.^0 + A(2).*Ouverture.^1 + A(3).*Ouverture.^2 + A(4).*Ouverture.^3 + A(5).*Ouverture.^4 + A(6).*Ouverture.^5 + A(7).*Ouverture.^6 + A(8).*Ouverture.^7 + A(9).*Ouverture.^8;
+values = A(1).*Ouverture.^0 + A(2).*Ouverture.^1 + A(3).*Ouverture.^2 + A(4).*Ouverture.^3 + A(5).*Ouverture.^4 + A(6).*Ouverture.^5 + A(7).*Ouverture.^6 + A(8).*Ouverture.^7;
 RMS = sqrt(1/numel(McPlotty)*sum((values-Coefficient).^2));
+
+OP = XPlotty(find(abs(McPlotty-target_coeff) < 0.0003));
 %% Finding coefficent
 
 target_speed = 22.5/3.6;
 Friction_work = masse*g*(He-30) + 0.5*masse*(target_speed^2-0);
 target_coeff = -Friction_work/(masse*g*(Xe-0));
+
+%% Speed per distance
+m = 80;
+g = 9.8;
+x = linspace(0,25);
+
+v = 3.6.*sqrt(2*(m.*g.*(30 - glissade) -target_coeff.*m.*g.*x)./m);
+%v = 3.6.*sqrt(2*(m.*g.*(30 - glissade))/m);
+
+figure
+hold on
+plot(x,glissade)
+plot(x,v)
+legend("glissade","vitesse (km/h)")
+
+max_speed = max(v);
+
+%% Timer for plastic collision
+
+v_plastic = (m*v(100)/3.6 - 8)/(m+8);
+t_plastic = 3/v_plastic;
+
+
+%% Timer for elastic collision
+e = 0.8;
+v2 = -1;
+Q_final = e*(v(100)/3.6 + 1);
+
+v_elastic = -(Q_final*8 -80*v(100)/3.6 + 8)/(88);
+t_elastic = 3/v_elastic;
+
+%% Timer 
+
+timer = (t_elastic + t_plastic)/2;
 
 
 
