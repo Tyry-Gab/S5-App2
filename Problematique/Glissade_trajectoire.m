@@ -27,6 +27,7 @@ derive = a(2)*Xe^0 + 2*a(3)*Xe^1 + 3*a(4)*Xe^2 + 4*a(5)*Xe^3;
 %% Plotting
 figure
 plot(X,glissade)
+title('Trajectoire')
 hold on 
 scatter(Xn,Yn)
 
@@ -41,23 +42,54 @@ friction_less_speed = sqrt(2*Loss_pot_energy/masse);
 
 Ouverture = [0 10 20 30 40 50 60 70 80 90 100];
 Coefficient = [0.87 0.78 0.71 0.61 0.62 0.51 0.51 0.49 0.46 0.48 0.46];
-
-phi = [ones(1,numel(Ouverture)); Ouverture; Ouverture.^2; Ouverture.^3; Ouverture.^4; Ouverture.^5; Ouverture.^6; Ouverture.^7]';
-A = inv(phi' * phi) * phi' * Coefficient';
-
-XPlotty = linspace(0,100,1000);
-McPlotty = A(1).*XPlotty.^0 + A(2).*XPlotty.^1 + A(3).*XPlotty.^2 + A(4).*XPlotty.^3 + A(5).*XPlotty.^4 + A(6).*XPlotty.^5 + A(7).*XPlotty.^6 + A(8).*XPlotty.^7;
+o_lineaire = linspace(0,100,1000);
+poly_order = 1:1:numel(Ouverture);
+rms_values = ones(numel(Ouverture),1);
+m=0;
 
 
 figure
+title('Coefficients pour la valve')
 hold on
+legend
+for m=poly_order
+    P_poly = ones(numel(Ouverture),m);
+    for i=2:m
+        P_poly(:,i) = Ouverture.^(i-1);
+    end
+    
+    a_poly = inv(P_poly'*P_poly)*P_poly'*Coefficient';
+    y_linear_poly = polyval(flip(a_poly),o_lineaire);
+    
+    
+    values = polyval(flip(a_poly),Ouverture);
+    rms_values(m)= sqrt(1/numel(y_linear_poly)*sum((values-Coefficient).^2));
+    plot(o_lineaire,y_linear_poly,'DisplayName',sprintf("Ordre %d",m)) 
+end
+
+
+figure
+scatter(poly_order,rms_values)
+
+
+m=7;
+P_poly = ones(numel(Ouverture),m);
+    for i=2:m
+        P_poly(:,i) = Ouverture.^(i-1);
+    end
+    
+a_poly = inv(P_poly'*P_poly)*P_poly'*Coefficient';
+y_linear_poly = polyval(flip(a_poly),o_lineaire);
+rms = rms_values(7);
+
+figure
+hold on
+text(70,0.8,sprintf("RMS: %d",rms))
 scatter(Ouverture,Coefficient)
-plot(XPlotty,McPlotty)
-
-values = A(1).*Ouverture.^0 + A(2).*Ouverture.^1 + A(3).*Ouverture.^2 + A(4).*Ouverture.^3 + A(5).*Ouverture.^4 + A(6).*Ouverture.^5 + A(7).*Ouverture.^6 + A(8).*Ouverture.^7;
-RMS = sqrt(1/numel(McPlotty)*sum((values-Coefficient).^2));
-
-OP = XPlotty(find(abs(McPlotty-target_coeff) < 0.0003));
+plot(o_lineaire,y_linear_poly)
+    
+    
+%OP = XPlotty(find(abs(McPlotty-target_coeff) < 0.0003));
 %% Finding coefficent
 
 target_speed = 22.5/3.6;
@@ -73,6 +105,7 @@ v = 3.6.*sqrt(2*(m.*g.*(30 - glissade) -target_coeff.*m.*g.*x)./m);
 %v = 3.6.*sqrt(2*(m.*g.*(30 - glissade))/m);
 
 figure
+title('Vitesse selon la trajectoire')
 hold on
 plot(x,glissade)
 plot(x,v)
