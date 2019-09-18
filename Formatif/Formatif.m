@@ -49,7 +49,6 @@ for i=Order
    
  
    values = 0;
-   integrale_analytique = 0;
    for q=1:i
       g_x = g_x + a(q).*x_linear.^(q-1);
       values = values + a(q).*x.^(q-1);
@@ -61,6 +60,9 @@ for i=Order
    plot(x_linear,g_x,'DisplayName',sprintf("Ordre %d",i))
 end
 legend
+Work = sum(g_x.*((0.5)/1000))*1000;
+
+v = sqrt(Work/(0.5*m));
 
 
 
