@@ -1,7 +1,7 @@
 %% Init
 clc
 clear
-
+close all
 %% The gud stuf
 
 Xn = [0 8 15 20  24];
@@ -27,9 +27,11 @@ derive = a(2)*Xe^0 + 2*a(3)*Xe^1 + 3*a(4)*Xe^2 + 4*a(5)*Xe^3;
 %% Plotting
 figure
 plot(X,glissade)
-title('Trajectoire')
+title('Trajectoire de la glissade')
 hold on 
 scatter(Xn,Yn)
+xlabel("Position horizontale (m)")
+ylabel("Position verticale (m)")
 
 %% Friction less cum speed
 masse = 80;
@@ -64,12 +66,16 @@ for m=poly_order
     
     values = polyval(flip(a_poly),Ouverture);
     rms_values(m)= sqrt(1/numel(y_linear_poly)*sum((values-Coefficient).^2));
-    plot(o_lineaire,y_linear_poly,'DisplayName',sprintf("Ordre %d",m)) 
+    plot(o_lineaire,y_linear_poly,'DisplayName',sprintf("Ordre %d",m-1)) 
 end
 
 
 figure
-scatter(poly_order,rms_values)
+hold on
+title("RMS des différents polynomes selon lerur ordre")
+scatter(poly_order-1,rms_values)
+xlabel("Ordre des pôlynomes")
+ylabel("RMS")
 
 
 m=7;
@@ -100,8 +106,8 @@ target_coeff = -Friction_work/(masse*g*(Xe-0));
 m = 80;
 g = 9.8;
 x = linspace(0,25);
-
-v = 3.6.*sqrt(2*(m.*g.*(30 - glissade) -target_coeff.*m.*g.*x)./m);
+%T = Vg - F;
+v = 3.6.*sqrt(2*(m.*g.*(30 - glissade) - target_coeff.*m.*g.*x)./m);
 %v = 3.6.*sqrt(2*(m.*g.*(30 - glissade))/m);
 
 figure
@@ -128,7 +134,6 @@ v_elastic = -(Q_final*8 -80*v(100)/3.6 + 8)/(88);
 t_elastic = 3/v_elastic;
 
 %% Timer 
-
 timer = (t_elastic + t_plastic)/2;
 
 
