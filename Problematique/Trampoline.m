@@ -2,7 +2,7 @@
 clear
 clc
 
-%% The gud stuf
+%% Calcul de déflection
 m=88;
 g = 9.8;
 h=5;

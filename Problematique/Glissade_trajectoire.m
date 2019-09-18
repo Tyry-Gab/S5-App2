@@ -2,13 +2,13 @@
 clc
 clear
 close all
-%% The gud stuf
+%% Trajectoire
 
 Xn = [0 8 15 20  24];
 Yn = [30 19 20 16 12.5];
 Xe = 25;
 
-papa_matrice = inv([
+phi = inv([
                 [numel(Xn) sum(Xn) sum(Xn.^2) sum(Xn.^3) sum(Xn.^4)];
                 [sum(Xn.^1) sum(Xn.^2) sum(Xn.^3) sum(Xn.^4) sum(Xn.^5)];
                 [sum(Xn.^2) sum(Xn.^3) sum(Xn.^4) sum(Xn.^5) sum(Xn.^6)];
@@ -17,7 +17,7 @@ papa_matrice = inv([
                ]);
 matrice_y = [sum(Yn); sum(Yn.*Xn); sum(Yn.*Xn.^2); sum(Yn.*Xn.^3); sum(Yn.*Xn.^4)];
 
-a = papa_matrice * matrice_y;
+a = phi * matrice_y;
 
 X = linspace(0,25);
 glissade = a(1) + a(2).*X.^1 + a(3).*X.^2 + a(4).*X.^3 + a(5).*X.^4; 
@@ -33,7 +33,7 @@ scatter(Xn,Yn)
 xlabel("Position horizontale (m)")
 ylabel("Position verticale (m)")
 
-%% Friction less cum speed
+%% Vitesse de sortie sans friction
 masse = 80;
 g = 9.8;
 Loss_pot_energy = masse*g*(30-He);
